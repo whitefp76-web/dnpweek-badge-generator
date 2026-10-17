@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1C242B">
 <meta name="description" content="Create your personalized National DNP Week 2026 I Am Attending graphic using the official Signature Attendance template.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Create your National DNP Week 2026 “I Am Attending” graphic">
+<meta property="og:description" content="Add your photo, name, and credentials to the official Signature Attendance template. Free, no login, processed in your browser.">
+<meta property="og:image" content="https://whitefp76-web.github.io/dnpweek-badge-generator/National%20DNP%20Week%20Attendance%20Poster.png">
+<meta property="og:url" content="https://whitefp76-web.github.io/dnpweek-badge-generator/">
+<meta name="twitter:card" content="summary_large_image">
 <title>Signature Attendance Graphic | National DNP Week 2026</title>
 <style>
 :root{color-scheme:light;--ink:#1C242B;--berry:#BC0288;--teal:#02799A;--text:#21303b;--muted:#576674;--line:#dce4e9;--surface:#fff;--wash:#f4f7f8;--focus:#02799A}
@@ -77,6 +83,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
 <div class="preview-footer"><p>October 19–25, 2026 · National DNP Week</p><span class="legend">Original artwork preserved outside portrait and footer</span></div></section>
 </div>
 <section class="below"><div><h2>Privacy first. No login required.</h2><p>The picture is processed locally in your browser. It is not uploaded to a server by this tool. Download the PNG, attach it to your LinkedIn post, and use your own wording or the optional prepared caption. The official template remains unchanged outside the photo and identification areas.</p></div><a href="https://dnpweek.com/" target="_blank" rel="noopener noreferrer">Explore National DNP Week ↗</a></section>
+<p class="fine" style="text-align:center;margin:18px auto 0">Tool developed by Dr. Fiona P. White, DNP, MSN, RN, National DNP Week Volunteer</p>
 </main>
 <script>
 'use strict';
@@ -208,7 +215,7 @@ downloadBtn.addEventListener('click',async()=>{
   const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=fileName();document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);status('PNG ready. Attach it to your LinkedIn post.');
  }catch(err){status('Unable to download the image in this browser. Please try a modern desktop or mobile browser.',true)}finally{updateControls()}
 });
-function caption(){return `I AM ATTENDING NATIONAL DNP WEEK 2026!\n\nOctober 19–25, 2026\n\nI'm joining colleagues across nursing to celebrate the leadership, scholarship, and systems-level impact of DNP-prepared nurses.\n\nDesigning the Future: DNPs Leading Systems, Science, and Social Change.\n\nSHOW THE WORK. SHAPE THE FUTURE.\n\nLearn more: https://dnpweek.com/\n\n#NationalDNPWeek #DNPWeek2026 #DoctorOfNursingPractice #DNPLeadership`;}
+function caption(){return `I AM ATTENDING NATIONAL DNP WEEK 2026!\n\nOctober 19–25, 2026\n\nI'm joining colleagues across nursing to celebrate the leadership, scholarship, and systems-level impact of DNP-prepared nurses.\n\nDesigning the Future: DNPs Leading Systems, Science, and Social Change.\n\nSHOW THE WORK. SHAPE THE FUTURE.\n\nLearn more: https://dnpweek.com/\nMake your own badge: https://whitefp76-web.github.io/dnpweek-badge-generator/\n\n#NationalDNPWeek #DNPWeek2026 #DoctorOfNursingPractice #DNPLeadership`;}
 copyBtn.addEventListener('click',async()=>{
  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(caption())}else{const box=document.createElement('textarea');box.value=caption();box.style.position='fixed';box.style.opacity='0';document.body.append(box);box.focus();box.select();if(!document.execCommand('copy'))throw new Error('No clipboard');box.remove()}status('LinkedIn caption copied. Paste into your new post.');}
  catch(err){status('Clipboard access is unavailable. Open the page in a supported browser to copy the caption.',true)}
