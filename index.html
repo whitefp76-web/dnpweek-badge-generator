@@ -92,7 +92,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
 <section class="below"><div><h2>Privacy first. No login required.</h2><p>The picture is processed locally in your browser. It is not uploaded to a server by this tool. Download the PNG, attach it to your LinkedIn post, and use your own wording or the optional prepared caption. The official template remains unchanged outside the photo and identification areas.</p></div><a href="https://dnpweek.com/" target="_blank" rel="noopener noreferrer">Explore National DNP Week ↗</a></section>
 <p class="fine" style="text-align:center;margin:18px auto 0">Tool developed by Dr. Fiona P. White, DNP, MSN, RN, National DNP Week Volunteer</p>
 </main>
-<div class="sheet" id="saveSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-card"><h2 id="sheetTitle">Your graphic is ready</h2><img id="sheetImg" alt="Your finished National DNP Week 2026 attendance graphic"><ol id="sheetSteps"><li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li></ol><button type="button" class="cta" id="shareBtn">Save or share image</button><a class="secondary" id="sheetDownload" href="#" download>Download file instead</a><button type="button" class="secondary" id="sheetClose">Close</button></div></div>
+<div class="sheet" id="saveSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-card"><h2 id="sheetTitle">Your graphic is ready</h2><img id="sheetImg" alt="Your finished National DNP Week 2026 attendance graphic"><ol id="sheetSteps"><li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li></ol><button type="button" class="cta" id="shareBtn">Save or share image</button><button type="button" class="secondary" id="sheetDownload">Download file</button><p class="status" id="sheetNote" role="status" aria-live="polite"></p><button type="button" class="secondary" id="sheetClose">Close</button></div></div>
 <script>
 'use strict';
 // The original uploaded artwork (with the fixed "YOUR NAME" label cleanly removed)
@@ -222,7 +222,9 @@ const IS_TOUCH=IS_IOS||/Android/i.test(UA)||(window.matchMedia&&matchMedia('(poi
 const IN_APP=/LinkedInApp|FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|Snapchat|GSA\//i.test(UA);
 if(IN_APP)document.getElementById('inappNotice').classList.add('show');
 const sheet=document.getElementById('saveSheet'),sheetImg=document.getElementById('sheetImg'),shareBtn=document.getElementById('shareBtn'),sheetDownload=document.getElementById('sheetDownload');
-let exportFile=null,exportURL=null,lastFocus=null;
+let exportFile=null,exportURL=null,exportDataURL=null,exportName='',lastFocus=null;
+const sheetNote=document.getElementById('sheetNote');
+function blobToDataURL(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(b)})}
 function canvasToBlob(c){return new Promise((resolve,reject)=>{
  if(c.toBlob){c.toBlob(b=>b?resolve(b):reject(new Error('toBlob returned null')),'image/png');return}
  try{const data=c.toDataURL('image/png'),bin=atob(data.split(',')[1]),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);resolve(new Blob([arr],{type:'image/png'}))}catch(e){reject(e)}
@@ -238,8 +240,14 @@ async function buildPNG(){
  throw new Error('Export failed');
 }
 function triggerDownload(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove()}
-function openSheet(){lastFocus=document.activeElement;sheet.classList.add('open');document.body.style.overflow='hidden';const canShare=!!(exportFile&&navigator.canShare&&navigator.canShare({files:[exportFile]}));shareBtn.style.display=canShare?'':'none';const steps=document.getElementById('sheetSteps');steps.innerHTML=canShare?'<li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li>':'<li>Press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li><li>If nothing appears, open this page in Safari or Chrome and try again.</li>';sheet.scrollTop=0;(canShare?shareBtn:document.getElementById('sheetClose')).focus({preventScroll:true})}
+function openSheet(){lastFocus=document.activeElement;sheet.classList.add('open');document.body.style.overflow='hidden';const canShare=!!(exportFile&&navigator.canShare&&navigator.canShare({files:[exportFile]}));shareBtn.style.display=canShare?'':'none';const steps=document.getElementById('sheetSteps');steps.innerHTML=canShare?'<li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li>':'<li>Press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li><li>If nothing appears, open this page in Safari or Chrome and try again.</li>';sheetDownload.style.display=IN_APP?'none':'';sheetNote.textContent='';sheetNote.classList.remove('error');sheet.scrollTop=0;(canShare?shareBtn:document.getElementById('sheetClose')).focus({preventScroll:true})}
 function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus({preventScroll:true})}
+sheetDownload.addEventListener('click',()=>{
+ if(!exportURL)return;
+ triggerDownload(IS_IOS&&exportDataURL?exportDataURL:exportURL,exportName);
+ sheetNote.classList.remove('error');
+ sheetNote.textContent=IS_IOS?'If asked, tap Download. The file goes to the Files app (Downloads folder), not Photos. For Photos, use Save or share.':'Check your Downloads folder or notification bar. For your photo gallery, use Save or share.';
+});
 document.getElementById('sheetClose').addEventListener('click',closeSheet);
 sheet.addEventListener('click',e=>{if(e.target===sheet)closeSheet()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))closeSheet()});
@@ -257,7 +265,9 @@ downloadBtn.addEventListener('click',async()=>{
   exportURL=URL.createObjectURL(blob);
   const name=fileName();
   try{exportFile=new File([blob],name,{type:'image/png'})}catch(e){exportFile=null}
-  sheetImg.src=exportURL;sheetDownload.href=exportURL;sheetDownload.download=name;
+  exportName=name;sheetImg.src=exportURL;
+  // iOS Safari and Chrome on iOS handle data: URLs far more reliably than blob: URLs for downloads. Prepared before the tap so the tap stays synchronous.
+  exportDataURL=null;if(IS_IOS){try{exportDataURL=await blobToDataURL(blob)}catch(e){exportDataURL=null}}
   if(IS_TOUCH||IN_APP){openSheet();status('Image ready. Save or share it from the window that opened.')}
   else{triggerDownload(exportURL,name);status('PNG downloaded. Attach it to your LinkedIn post.')}
  }catch(err){console.error(err);status('This device could not build the image. Close other tabs and try again, or use a desktop browser.',true)}
