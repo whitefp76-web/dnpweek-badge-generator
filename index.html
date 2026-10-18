@@ -46,6 +46,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
 .below{margin-top:25px;background:#fff;border:1px solid var(--line);padding:20px 23px;border-radius:12px;display:flex;align-items:start;gap:18px;justify-content:space-between;flex-wrap:wrap}.below h2{font-size:16px;margin:0 0 7px}.below p{max-width:830px;margin:0;color:var(--muted);font-size:13px}.below a{color:#006f8b;text-underline-offset:3px;font-weight:700}
 @media(max-width:890px){.layout{grid-template-columns:minmax(0,1fr)}.controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.controls-head{grid-column:1/-1}.actions{grid-column:1/-1}.preview-panel{grid-row:1}}
 @media(max-width:580px){.controls{grid-template-columns:1fr;padding:17px}.controls-head,.actions{grid-column:1}.topbar-inner{padding:16px}.brand b{font-size:13px}.brand small{font-size:11px}.preview-panel{padding:10px}.below{padding:17px}.tag{font-size:10px}}
+.inapp{display:none;background:#fff4d6;border:1px solid #e8c766;color:#5a4300;border-radius:10px;padding:12px 14px;font-size:13px;margin:0 0 18px}.inapp.show{display:block}.inapp b{color:#3d2e00}
+.reason{font-size:12px;color:#9d2050;margin:8px 0 0;min-height:0}
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(14,20,26,.86);display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}.sheet.open{display:flex}
+.sheet-card{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:16px;display:grid;gap:12px;max-height:calc(100dvh - 32px);overflow-y:auto}
+.sheet-card h2{font-size:17px}.sheet-card img{width:100%;height:auto;max-height:52dvh;object-fit:contain;border-radius:8px;display:block;-webkit-touch-callout:default;user-select:auto}
+.sheet-card ol{margin:0;padding-left:20px;font-size:13px;color:var(--text)}.sheet-card li+li{margin-top:4px}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -56,6 +62,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
 <a class="top-link" href="https://dnpweek.com/" target="_blank" rel="noopener noreferrer">Visit dnpweek.com ↗</a>
 </div></header>
 <main>
+<p class="inapp" id="inappNotice" role="note"><b>Opened inside LinkedIn or another app?</b> That app&rsquo;s built-in browser can block downloads. Tap the &hellip; or share menu and choose <b>Open in Safari</b> or <b>Open in Chrome</b>, or create your graphic and press and hold the finished image to save it.</p>
 <section class="intro"><p class="eyebrow">Celebrate. Share. Inspire.</p><h1>Create your “I Am Attending” graphic</h1>
 <p class="lede">One signature design. Your photo, your name, your credentials. Make a personalized National DNP Week 2026 graphic for LinkedIn in a few steps.</p></section>
 <div class="layout">
@@ -76,7 +83,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
   <p class="step"><span class="stepnum">3</span> Adjust your portrait</p>
   <div class="tools"><div class="tools-head"><strong>Photo zoom</strong><span id="zoomValue">100%</span></div><input class="range" type="range" min="100" max="275" step="1" value="100" id="zoomInput" aria-label="Photo zoom"><div class="tools-buttons"><button type="button" class="mini" id="centerBtn">Center photo</button><button type="button" class="mini" id="removeBtn">Remove photo</button></div><p class="fine">Drag the photo in the preview to reposition it. Use the arrow keys when the preview is focused.</p></div>
  </div>
- <div class="actions"><p class="step"><span class="stepnum">4</span> Download and share</p><button type="button" id="downloadBtn" class="cta" disabled>↓ Download LinkedIn PNG</button><p class="helper" style="margin-bottom:12px">High-resolution square image (2508 × 2508 px).</p><button type="button" id="copyBtn" class="secondary">Copy LinkedIn caption</button><p id="status" class="status" role="status" aria-live="polite"></p></div>
+ <div class="actions"><p class="step"><span class="stepnum">4</span> Download and share</p><button type="button" id="downloadBtn" class="cta" disabled>↓ Download LinkedIn PNG</button><p class="reason" id="downloadReason" aria-live="polite"></p><p class="helper" style="margin-bottom:12px">High-resolution square image (2508 × 2508 px).</p><button type="button" id="copyBtn" class="secondary">Copy LinkedIn caption</button><p id="status" class="status" role="status" aria-live="polite"></p></div>
 </section>
 <section class="panel preview-panel" aria-label="Poster preview"><div class="preview-head"><h2>Your Signature Attendance graphic</h2><span class="tag">LOCKED ORIGINAL TEMPLATE</span></div>
 <div class="canvas-wrap"><canvas id="poster" width="1254" height="1254" tabindex="0" role="img" aria-label="Live preview of your National DNP Week attendance poster. Drag to reposition the uploaded photograph.">Your browser must support HTML Canvas to use this graphic generator.</canvas></div>
@@ -85,6 +92,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible{ou
 <section class="below"><div><h2>Privacy first. No login required.</h2><p>The picture is processed locally in your browser. It is not uploaded to a server by this tool. Download the PNG, attach it to your LinkedIn post, and use your own wording or the optional prepared caption. The official template remains unchanged outside the photo and identification areas.</p></div><a href="https://dnpweek.com/" target="_blank" rel="noopener noreferrer">Explore National DNP Week ↗</a></section>
 <p class="fine" style="text-align:center;margin:18px auto 0">Tool developed by Dr. Fiona P. White, DNP, MSN, RN, National DNP Week Volunteer</p>
 </main>
+<div class="sheet" id="saveSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-card"><h2 id="sheetTitle">Your graphic is ready</h2><img id="sheetImg" alt="Your finished National DNP Week 2026 attendance graphic"><ol id="sheetSteps"><li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li></ol><button type="button" class="cta" id="shareBtn">Save or share image</button><a class="secondary" id="sheetDownload" href="#" download>Download file instead</a><button type="button" class="secondary" id="sheetClose">Close</button></div></div>
 <script>
 'use strict';
 // The original uploaded artwork (with the fixed "YOUR NAME" label cleanly removed)
@@ -173,17 +181,17 @@ function renderTo(context,scale=1){
  drawIdentity(context);context.restore();
 }
 function rerender(){if(template)renderTo(ctx)}
-function updateControls(){zoomInput.disabled=!photo;document.getElementById('centerBtn').disabled=!photo;document.getElementById('removeBtn').disabled=!photo;downloadBtn.disabled=!photo||!nameInput.value.trim();canvas.classList.toggle('has-photo',!!photo);}
+function updateControls(){zoomInput.disabled=!photo;document.getElementById('centerBtn').disabled=!photo;document.getElementById('removeBtn').disabled=!photo;downloadBtn.disabled=!photo||!nameInput.value.trim();const why=document.getElementById('downloadReason');if(why)why.textContent=!template?'':!photo&&!nameInput.value.trim()?'Add your photo and name to turn on download.':!photo?'Add your photo to turn on download.':!nameInput.value.trim()?'Enter your name to turn on download.':'';canvas.classList.toggle('has-photo',!!photo);}
 function setZoom(value){zoom=clamp(value,1,2.75);zoomInput.value=String(Math.round(zoom*100));zoomValue.textContent=Math.round(zoom*100)+'%';rerender()}
 function resetPhotoPosition(){pan={x:0,y:0};setZoom(1);status('Photo recentered.')}
 function clearPhoto(){photo=null;if(photoURL){URL.revokeObjectURL(photoURL);photoURL=null;}photoInput.value='';document.getElementById('uploadLabel').textContent='Choose or drop a photo';zoom=1;pan={x:0,y:0};setZoom(1);updateControls();status('Photo removed.');}
 function loadFile(file){
  if(!file)return;
- if(!['image/jpeg','image/png','image/webp'].includes(file.type)){status('Use a JPG, PNG, or WebP photo.',true);return}
+ if(file.type&&!/^image\//.test(file.type)){status('Use a JPG, PNG, or WebP photo.',true);return}
  if(file.size>25*1024*1024){status('Please choose a photo smaller than 25 MB.',true);return}
  const url=URL.createObjectURL(file),img=new Image();
  img.onload=()=>{if(photoURL)URL.revokeObjectURL(photoURL);photoURL=url;photo=img;pan={x:0,y:0};setZoom(1);document.getElementById('uploadLabel').textContent=file.name.length>38?file.name.slice(0,35)+'…':file.name;updateControls();status('Photo added. Drag it in the preview to adjust.');rerender()};
- img.onerror=()=>{URL.revokeObjectURL(url);status('Could not open this image. Try another JPG, PNG, or WebP.',true)};
+ img.onerror=()=>{URL.revokeObjectURL(url);status(/hei[cf]/i.test(file.type+file.name)?'This browser cannot open HEIC photos. On iPhone, choose the photo from the Photos picker (not Files), or take a screenshot of it and upload that.':'Could not open this image. Try another JPG, PNG, or WebP.',true)};
  img.src=url;
 }
 photoInput.addEventListener('change',e=>loadFile(e.target.files&&e.target.files[0]));
@@ -207,13 +215,53 @@ function endPointer(e){if(pointer&&pointer.id===e.pointerId){pointer=null;canvas
 canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',endPointer);
 canvas.addEventListener('keydown',e=>{if(!photo||!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const amount=e.shiftKey?15:4;const d={ArrowUp:[0,-amount],ArrowDown:[0,amount],ArrowLeft:[-amount,0],ArrowRight:[amount,0]}[e.key];pan.x+=d[0];pan.y+=d[1];rerender()});
 function fileName(){const p=nameInput.value.trim().toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,55);return `national-dnp-week-2026-${p||'attending'}.png`}
+// ---- Export and save (desktop download, mobile share sheet, in-app-browser fallback) ----
+const UA=navigator.userAgent||'';
+const IS_IOS=/iP(hone|ad|od)/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const IS_TOUCH=IS_IOS||/Android/i.test(UA)||(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
+const IN_APP=/LinkedInApp|FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|Snapchat|GSA\//i.test(UA);
+if(IN_APP)document.getElementById('inappNotice').classList.add('show');
+const sheet=document.getElementById('saveSheet'),sheetImg=document.getElementById('sheetImg'),shareBtn=document.getElementById('shareBtn'),sheetDownload=document.getElementById('sheetDownload');
+let exportFile=null,exportURL=null,lastFocus=null;
+function canvasToBlob(c){return new Promise((resolve,reject)=>{
+ if(c.toBlob){c.toBlob(b=>b?resolve(b):reject(new Error('toBlob returned null')),'image/png');return}
+ try{const data=c.toDataURL('image/png'),bin=atob(data.split(',')[1]),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);resolve(new Blob([arr],{type:'image/png'}))}catch(e){reject(e)}
+})}
+async function buildPNG(){
+ // Try full resolution first; fall back to 1x if the device refuses a large canvas (older iPhones/iPads).
+ for(const scale of [2,1]){
+  const c=document.createElement('canvas');c.width=WIDTH*scale;c.height=HEIGHT*scale;
+  try{const x=c.getContext('2d',{alpha:false});if(!x)throw new Error('No 2D context');renderTo(x,scale);const blob=await canvasToBlob(c);if(blob&&blob.size>1000)return blob}
+  catch(e){console.warn('Export at scale',scale,'failed',e)}
+  finally{c.width=c.height=0}// release canvas memory immediately (iOS caps total canvas memory)
+ }
+ throw new Error('Export failed');
+}
+function triggerDownload(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove()}
+function openSheet(){lastFocus=document.activeElement;sheet.classList.add('open');document.body.style.overflow='hidden';const canShare=!!(exportFile&&navigator.canShare&&navigator.canShare({files:[exportFile]}));shareBtn.style.display=canShare?'':'none';const steps=document.getElementById('sheetSteps');steps.innerHTML=canShare?'<li>Tap <b>Save or share</b> and choose <b>Save Image</b> (iPhone/iPad) or <b>Save</b> / <b>LinkedIn</b>.</li><li>If that button does nothing, press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li>':'<li>Press and hold the image above and choose <b>Save to Photos</b> or <b>Download image</b>.</li><li>If nothing appears, open this page in Safari or Chrome and try again.</li>';sheet.scrollTop=0;(canShare?shareBtn:document.getElementById('sheetClose')).focus({preventScroll:true})}
+function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';if(lastFocus)lastFocus.focus({preventScroll:true})}
+document.getElementById('sheetClose').addEventListener('click',closeSheet);
+sheet.addEventListener('click',e=>{if(e.target===sheet)closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))closeSheet()});
+// share() is called synchronously inside this tap, so iOS Safari keeps the user gesture it requires.
+shareBtn.addEventListener('click',()=>{
+ if(!exportFile)return;
+ navigator.share({files:[exportFile],title:'National DNP Week 2026'}).then(()=>status('Saved or shared. Attach it to your LinkedIn post.')).catch(err=>{if(err&&err.name==='AbortError')return;status('Sharing is blocked here. Press and hold the image to save it.',true)});
+});
 downloadBtn.addEventListener('click',async()=>{
  if(!photo||!nameInput.value.trim()){status('Add a photo and enter your name first.',true);return}
  downloadBtn.disabled=true;status('Preparing high-resolution PNG…');
- try{const exportCanvas=document.createElement('canvas');exportCanvas.width=WIDTH*2;exportCanvas.height=HEIGHT*2;const exportCtx=exportCanvas.getContext('2d',{alpha:false});renderTo(exportCtx,2);
-  const blob=await new Promise((resolve,reject)=>exportCanvas.toBlob(b=>b?resolve(b):reject(new Error('Export failed')),'image/png'));
-  const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=fileName();document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);status('PNG ready. Attach it to your LinkedIn post.');
- }catch(err){status('Unable to download the image in this browser. Please try a modern desktop or mobile browser.',true)}finally{updateControls()}
+ try{
+  const blob=await buildPNG();
+  if(exportURL)URL.revokeObjectURL(exportURL);
+  exportURL=URL.createObjectURL(blob);
+  const name=fileName();
+  try{exportFile=new File([blob],name,{type:'image/png'})}catch(e){exportFile=null}
+  sheetImg.src=exportURL;sheetDownload.href=exportURL;sheetDownload.download=name;
+  if(IS_TOUCH||IN_APP){openSheet();status('Image ready. Save or share it from the window that opened.')}
+  else{triggerDownload(exportURL,name);status('PNG downloaded. Attach it to your LinkedIn post.')}
+ }catch(err){console.error(err);status('This device could not build the image. Close other tabs and try again, or use a desktop browser.',true)}
+ finally{updateControls()}
 });
 function caption(){return `I AM ATTENDING NATIONAL DNP WEEK 2026!\n\nOctober 19–25, 2026\n\nI'm joining colleagues across nursing to celebrate the leadership, scholarship, and systems-level impact of DNP-prepared nurses.\n\nDesigning the Future: DNPs Leading Systems, Science, and Social Change.\n\nSHOW THE WORK. SHAPE THE FUTURE.\n\nLearn more: https://dnpweek.com/\nMake your own badge: https://whitefp76-web.github.io/dnpweek-badge-generator/\n\n#NationalDNPWeek #DNPWeek2026 #DoctorOfNursingPractice #DNPLeadership`;}
 copyBtn.addEventListener('click',async()=>{
